@@ -1,0 +1,48 @@
+{
+  "name": "my-capbackend",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/postgres": "^2.3.0",
+    "@sap/cds": "^9",
+    "@sap/xssec": "^4",
+    "exceljs": "^4.4.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2.4",
+    "@sap/cds-dk": "^9",
+    "sqlite3": "^6.0.1"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "dev": "cds watch"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "db": {
+        "[development]": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": "sqlite.db"
+          }
+        },
+        "[production]": {
+          "kind": "postgres"
+        }
+      },
+      "[production]": {
+        "auth": "mocked"
+      }
+    },
+    "server": {
+      "cors": {
+        "origin": [
+          "http://localhost:8080",
+          "http://localhost:8081"
+        ],
+        "credentials": true
+      }
+    }
+  }
+}
