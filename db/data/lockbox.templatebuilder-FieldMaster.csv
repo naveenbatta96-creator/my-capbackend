@@ -1,35 +1,35 @@
-ID;levelName;fieldName;sapType;fieldLength;propertyType;isRequired
-11111111-1111-1111-1111-111111111111;HEADER;Lockbox ID;CHAR;10;Standard;true
-22222222-2222-2222-2222-222222222222;HEADER;Company Code;CHAR;4;Standard;true
-33333333-3333-3333-3333-333333333333;HEADER;Batch Destination;CHAR;15;Standard;false
-44444444-4444-4444-4444-444444444444;HEADER;Batch Origin;CHAR;15;Standard;false
-55555555-5555-5555-5555-555555555555;HEADER;Deposit Date;DATS;8;Date;true
-66666666-6666-6666-6666-666666666661;HEADER;Payment File Name;CHAR;255;Standard;false
-66666666-6666-6666-6666-666666666662;HEADER;Currency;CUKY;5;Standard;false
-66666666-6666-6666-6666-666666666663;HEADER;Total Batch Amount;CURR;15;Amount;false
-66666666-6666-6666-6666-666666666664;HEADER;Number of Payments;INT4;10;Number;false
-77777777-7777-7777-7777-777777777771;PAYMENT;Payment Value Date;DATS;8;Date;false
-66666666-6666-6666-6666-666666666666;PAYMENT;Payment Amount;CURR;15;Amount;true
-77777777-7777-7777-7777-777777777772;PAYMENT;Payment Currency;CUKY;5;Standard;false
-77777777-7777-7777-7777-777777777777;PAYMENT;Cheque Number;CHAR;15;Standard;false
-77777777-7777-7777-7777-777777777773;PAYMENT;Bank Country;CHAR;3;Standard;false
-88888888-8888-8888-8888-888888888888;PAYMENT;Bank Name;CHAR;15;Standard;false
-77777777-7777-7777-7777-777777777774;PAYMENT;Bank Account Number;CHAR;18;Standard;false
-77777777-7777-7777-7777-777777777775;PAYMENT;Customer Number;CHAR;10;Standard;false
-77777777-7777-7777-7777-777777777776;PAYMENT;Memo Line 1;CHAR;50;Standard;false
-77777777-7777-7777-7777-777777777778;PAYMENT;Memo / Remarks;CHAR;140;Standard;false
-77777777-7777-7777-7777-777777777779;PAYMENT;Payment Advice Number;CHAR;10;Standard;false
-77777777-7777-7777-7777-777777777780;PAYMENT;Assignment Reference;CHAR;18;Standard;false
-77777777-7777-7777-7777-777777777781;PAYMENT;Item Text;CHAR;50;Standard;false
-77777777-7777-7777-7777-777777777782;PAYMENT;Reference Document ID;CHAR;16;Standard;false
-77777777-7777-7777-7777-777777777783;PAYMENT;Manual Transaction Type;CHAR;4;Standard;false
-77777777-7777-7777-7777-777777777784;PAYMENT;Additional Information;STRING;255;Standard;false
-88888888-8888-8888-8888-888888888881;CLEARING;Payment Advice Number;CHAR;10;Standard;false
-88888888-8888-8888-8888-888888888882;CLEARING;Payment Advice Item;NUMC;6;Number;false
-88888888-8888-8888-8888-888888888883;CLEARING;Customer Account;CHAR;10;Standard;false
-88888888-8888-8888-8888-888888888884;CLEARING;Account Type;CHAR;1;Standard;false
-88888888-8888-8888-8888-888888888885;CLEARING;Invoice;CHAR;20;Standard;false
-99999999-9999-9999-9999-999999999999;CLEARING;Invoice Amount;CURR;15;Amount;true
-88888888-8888-8888-8888-888888888886;CLEARING;Deduction Amount;CURR;15;Amount;false
-10101010-1010-1010-1010-101010101010;CLEARING;Difference Reason;CHAR;3;Standard;false
-88888888-8888-8888-8888-888888888887;CLEARING;Invoice Currency;CUKY;5;Standard;false
+levelName;fieldName;sapType;fieldLength;propertyType;isRequired;isCustom
+HEADER;Lockbox ID;CHAR;10;Standard;true;false
+HEADER;Company Code;CHAR;4;Standard;true;false
+HEADER;Batch Destination;CHAR;15;Standard;false;false
+HEADER;Batch Origin;CHAR;15;Standard;false;false
+HEADER;Deposit Date;DATS;8;Date;true;false
+HEADER;Payment File Name;CHAR;255;Standard;false;false
+HEADER;Currency;CUKY;5;Standard;false;false
+HEADER;Total Batch Amount;CURR;15;Amount;false;false
+HEADER;Number of Payments;INT4;10;Number;false;false
+PAYMENT;Payment Value Date;DATS;8;Date;false;false
+PAYMENT;Payment Amount;CURR;15;Amount;true;false
+PAYMENT;Payment Currency;CUKY;5;Standard;false;false
+PAYMENT;Cheque Number;CHAR;15;Standard;false;false
+PAYMENT;Bank Country;CHAR;3;Standard;false;false
+PAYMENT;Bank Name;CHAR;15;Standard;false;false
+PAYMENT;Bank Account Number;CHAR;18;Standard;false;false
+PAYMENT;Customer Number;CHAR;10;Standard;false;false
+PAYMENT;Memo Line 1;CHAR;50;Standard;false;false
+PAYMENT;Memo / Remarks;CHAR;140;Standard;false;false
+PAYMENT;Payment Advice Number;CHAR;10;Standard;false;false
+PAYMENT;Assignment Reference;CHAR;18;Standard;false;false
+PAYMENT;Item Text;CHAR;50;Standard;false;false
+PAYMENT;Reference Document ID;CHAR;16;Standard;false;false
+PAYMENT;Manual Transaction Type;CHAR;4;Standard;false;false
+PAYMENT;Additional Information;STRING;255;Standard;false;false
+CLEARING;Payment Advice Number;CHAR;10;Standard;false;false
+CLEARING;Payment Advice Item;NUMC;6;Number;false;false
+CLEARING;Customer Account;CHAR;10;Standard;false;false
+CLEARING;Account Type;CHAR;1;Standard;false;false
+CLEARING;Invoice;CHAR;20;Standard;false;false
+CLEARING;Invoice Amount;CURR;15;Amount;true;false
+CLEARING;Deduction Amount;CURR;15;Amount;false;false
+CLEARING;Difference Reason;CHAR;3;Standard;false;false
+CLEARING;Invoice Currency;CUKY;5;Standard;false;false
