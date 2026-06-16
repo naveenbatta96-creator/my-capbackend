@@ -6,13 +6,14 @@ using {
 } from '@sap/cds/common';
 
 entity TemplateMaster : cuid, managed {
-    templateName : String(100);
-    templateType : String(50);
-    sheetMode    : String(20);
-    status       : String(20);
-    isStandard   : Boolean default false; // ✅ NEW
-    mappings     : Composition of many TemplateFieldMapping
-                       on mappings.template = $self;
+    templateName          : String(100);
+    templateType          : String(50);
+    sheetMode             : String(20);
+    status                : String(20);
+    isStandard            : Boolean default false; // ✅ NEW
+    virtual mappingsCount : Integer; // For storing the count of associated fields
+    mappings              : Composition of many TemplateFieldMapping
+                                on mappings.template = $self;
 }
 
 
@@ -22,18 +23,20 @@ entity FieldMaster : cuid {
     sapType      : String(40);
     fieldLength  : String(20);
     propertyType : String(20);
+    isStandard   : Boolean default true;
     isRequired   : Boolean;
     isCustom     : Boolean default false; // ✅ NEW — tracks user-added fields
 }
 
 entity TemplateFieldMapping : cuid {
-    template    : Association to TemplateMaster;
-    field       : Association to FieldMaster;
-    sequenceNo  : Integer;
-    apiField    : String(100);
-    mappingRule : String(100);
-    ruleId      : String(50);
-    ruleName    : String(100);
+    template        : Association to TemplateMaster;
+    field           : Association to FieldMaster;
+    sourceFieldName : String(100);
+    sequenceNo      : Integer;
+    apiField        : String(100);
+    mappingRule     : String(100);
+    ruleId          : String(50);
+    ruleName        : String(100);
 }
 
 //================================================================

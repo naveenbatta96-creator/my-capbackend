@@ -6,16 +6,19 @@
     "@sap/cds": "^9",
     "@sap/xssec": "^4",
     "exceljs": "^4.4.0",
+    "passport": "^0.7.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2.4",
     "@sap/cds-dk": "^9",
+    "patch-package": "^8.0.1",
     "sqlite3": "^6.0.1"
   },
   "scripts": {
     "start": "cds-serve",
-    "dev": "cds watch"
+    "dev": "cds watch",
+    "postinstall": "patch-package"
   },
   "private": true,
   "cds": {
@@ -25,14 +28,29 @@
           "kind": "sqlite",
           "credentials": {
             "url": "sqlite.db"
+          },
+          "data": {
+            "init": "upsert"
           }
         },
         "[production]": {
           "kind": "postgres"
         }
       },
-      "[production]": {
-        "auth": "mocked"
+      "auth": {
+        "[development]": {
+          "kind": "mocked",
+          "users": {
+            "alice": { "roles": ["admin"] },
+            "bob":   { "roles": ["user"]  },
+            "admin": { "roles": ["admin"] },
+            "user":  { "roles": ["user"]  }
+            }
+          },
+
+        "[production]": {
+          "kind": "xsuaa"
+        }
       }
     },
     "server": {
@@ -46,3 +64,4 @@
     }
   }
 }
+

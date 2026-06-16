@@ -1,35 +1,33 @@
-levelName;fieldName;sapType;fieldLength;propertyType;isRequired;isCustom
-HEADER;Lockbox ID;CHAR;10;Standard;true;false
-HEADER;Company Code;CHAR;4;Standard;true;false
-HEADER;Batch Destination;CHAR;15;Standard;false;false
-HEADER;Batch Origin;CHAR;15;Standard;false;false
-HEADER;Deposit Date;DATS;8;Date;true;false
-HEADER;Payment File Name;CHAR;255;Standard;false;false
-HEADER;Currency;CUKY;5;Standard;false;false
-HEADER;Total Batch Amount;CURR;15;Amount;false;false
-HEADER;Number of Payments;INT4;10;Number;false;false
-PAYMENT;Payment Value Date;DATS;8;Date;false;false
-PAYMENT;Payment Amount;CURR;15;Amount;true;false
-PAYMENT;Payment Currency;CUKY;5;Standard;false;false
-PAYMENT;Cheque Number;CHAR;15;Standard;false;false
-PAYMENT;Bank Country;CHAR;3;Standard;false;false
-PAYMENT;Bank Name;CHAR;15;Standard;false;false
-PAYMENT;Bank Account Number;CHAR;18;Standard;false;false
-PAYMENT;Customer Number;CHAR;10;Standard;false;false
-PAYMENT;Memo Line 1;CHAR;50;Standard;false;false
-PAYMENT;Memo / Remarks;CHAR;140;Standard;false;false
-PAYMENT;Payment Advice Number;CHAR;10;Standard;false;false
-PAYMENT;Assignment Reference;CHAR;18;Standard;false;false
-PAYMENT;Item Text;CHAR;50;Standard;false;false
-PAYMENT;Reference Document ID;CHAR;16;Standard;false;false
-PAYMENT;Manual Transaction Type;CHAR;4;Standard;false;false
-PAYMENT;Additional Information;STRING;255;Standard;false;false
-CLEARING;Payment Advice Number;CHAR;10;Standard;false;false
-CLEARING;Payment Advice Item;NUMC;6;Number;false;false
-CLEARING;Customer Account;CHAR;10;Standard;false;false
-CLEARING;Account Type;CHAR;1;Standard;false;false
-CLEARING;Invoice;CHAR;20;Standard;false;false
-CLEARING;Invoice Amount;CURR;15;Amount;true;false
-CLEARING;Deduction Amount;CURR;15;Amount;false;false
-CLEARING;Difference Reason;CHAR;3;Standard;false;false
-CLEARING;Invoice Currency;CUKY;5;Standard;false;false
+ID;levelName;fieldName;sapType;fieldLength;propertyType;isRequired;isCustom
+b87f3ccf-ffe4-4cac-b809-1e668ac276db;HEADER;Deposit Date;DATS;8;Date;true;false
+bc1c153c-af72-4a5e-9e1c-f22b6582a5f7;HEADER;Company Code;CHAR;4;Standard;true;false
+fc722230-50fb-4e96-9a3e-ac1043b1d36f;HEADER;Batch Destination;CHAR;15;Standard;false;false
+e6d1e100-3af8-458a-a7ab-b23100f256bf;HEADER;Batch Origin;CHAR;15;Standard;false;false
+ec42eaf5-a192-48c3-8d81-b7a84e147c96;HEADER;Currency;CUKY;5;Standard;false;false
+268f5861-9b08-4f21-9420-a47f7509de0c;HEADER;Total Batch Amount;CURR;15;Amount;false;false
+5dcf34dd-a909-4cb9-9fbf-1cde0537c1d8;HEADER;Lockbox Batch;CHAR;10;Standard;false;false
+683388e3-df46-401a-8034-a1c0d503f005;HEADER;Lockbox ID;CHAR;10;Standard;true;false
+256e0a4c-4b26-4ea3-8f76-09b9f085ee86;PAYMENT;Customer Number;CHAR;10;Standard;false;false
+af47eb36-c2b5-4401-a390-0246032f7d65;PAYMENT;Payment Amount;CURR;15;Amount;true;false
+8506519f-a516-4ea0-b869-e0e4acd13a40;PAYMENT;Payment Currency;CUKY;5;Standard;false;false
+b712307d-cbd2-4dbb-9b6e-0e644d77040d;PAYMENT;Cheque Number;CHAR;15;Standard;false;false
+6cfc93de-3478-4ed2-8f5e-29303736faa5;PAYMENT;Assignment Reference;CHAR;18;Standard;false;false
+2a55da85-414e-475b-ad5a-faa30cc39792;PAYMENT;Payment Reference;CHAR;16;Standard;false;false
+00cd8f32-86f2-4344-afc7-e030d536f4f2;PAYMENT;Lockbox Batch Item;CHAR;10;Standard;false;false
+52d63700-1656-4b7b-9c94-b4818cec7d1a;PAYMENT;Payment Difference Reason;CHAR;3;Standard;false;false
+6c5e4892-f343-41bd-a3a4-9840188b7d40;PAYMENT;Memo Line 1;CHAR;50;Standard;false;false
+724d8706-e61e-413d-80ba-5c6cfb5390a9;PAYMENT;Lockbox Batch Reference;CHAR;10;Standard;false;false
+ed34d547-c787-4f11-8bd8-968f7b8e7040;PAYMENT;Lockbox Number;CHAR;10;Standard;false;false
+c7730775-b2c1-461d-b707-afea23ee5075;PAYMENT;Customer Account;CHAR;10;Standard;false;false
+c33cb55a-1754-4817-a46c-4fa3136df93d;CLEARING;Lockbox Batch Item Number;NUMC;6;Number;false;false
+eef63af8-745a-4eff-a101-642e59203567;CLEARING;Payment Difference Code;CHAR;3;Standard;false;false
+751424df-fba6-4436-92f4-b838d85fa18d;CLEARING;Invoice Reference;CHAR;16;Standard;false;false
+47307aee-8a76-43c0-b337-23696e56dfd3;CLEARING;Payment Advice Number;CHAR;10;Standard;false;false
+c095c36d-84b6-4ba1-8482-eb1e3124c24c;CLEARING;Customer;CHAR;10;Standard;false;false
+1d09230c-d384-4eca-a23a-301c3e16d3d7;CLEARING;Account Type;CHAR;1;Standard;false;false
+459965f2-e760-4e7c-9dd0-1ba9f4bd60db;CLEARING;Invoice Currency;CUKY;5;Standard;false;false
+757005ed-9805-42b5-a5e2-b6adf5bbcaba;CLEARING;Net Payment Amount;CURR;15;Amount;false;false
+a86c28cc-108e-4892-a480-b490a5a7a8b0;CLEARING;Deduction Amount;CURR;15;Amount;false;false
+f3e5fa61-899a-40bd-bc03-302df30ee2ca;CLEARING;Difference Reason;CHAR;3;Standard;false;false
+971311ac-d8fd-4456-84ed-53f005918696;CLEARING;Lockbox Batch Item Ref;CHAR;10;Standard;false;false
+9379bd65-f9ba-415a-b999-373102084117;CLEARING;Lockbox Batch Number;CHAR;10;Standard;false;false

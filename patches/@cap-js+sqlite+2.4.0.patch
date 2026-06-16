@@ -1,0 +1,23 @@
+diff --git a/node_modules/@cap-js/sqlite/lib/SQLiteService.js b/node_modules/@cap-js/sqlite/lib/SQLiteService.js
+index 3e2ab7a..f986f61 100644
+--- a/node_modules/@cap-js/sqlite/lib/SQLiteService.js
++++ b/node_modules/@cap-js/sqlite/lib/SQLiteService.js
+@@ -198,6 +198,18 @@ class SQLiteService extends SQLService {
+   }
+ 
+   static CQN2SQL = class CQN2SQLite extends SQLService.CQN2SQL {
++    
++    // --- PATCH START: Intercept INSERT generation to handle the 9.9.1 re-seed composition bug ---
++    INSERT(q) {
++      const sql = super.INSERT(q)
++      // Safely replace the statement opener for SQLite compatibility
++      if (typeof sql === 'string' && sql.startsWith('INSERT INTO')) {
++        return sql.replace(/^INSERT INTO/, 'INSERT OR IGNORE INTO')
++      }
++      return sql
++    }
++    // --- PATCH END ---
++
+     column_alias4(x, q) {
+       let alias = super.column_alias4(x, q)
+       if (alias) return alias

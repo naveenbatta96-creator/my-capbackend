@@ -1,0 +1,71 @@
+_schema-version: 3.3.0
+ID: my-capbackend
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: my-capbackend-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: my-capbackend-postgres
+      - name: my-capbackend-auth
+
+  - name: my-capbackend-postgres-deployer
+    type: nodejs
+    path: gen/pg
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - name: deploy-to-postgresql
+          command: npm start
+    requires:
+      - name: my-capbackend-postgres
+
+resources:
+  - name: my-capbackend-postgres
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: development
+
+  - name: my-capbackend-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: my-capbackend-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - binding-secret
+            - x509
+        role-collections:
+          - name: "TemplateBuilder_Admin (${org}-${space})"
+            description: "Admin role collection"
+            role-template-references:
+              - "$XSAPPNAME.admin"
+          - name: "TemplateBuilder_User (${org}-${space})"
+            description: "User role collection"
+            role-template-references:
+              - "$XSAPPNAME.user"

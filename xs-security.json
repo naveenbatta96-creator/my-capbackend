@@ -1,0 +1,39 @@
+{
+  "xsappname": "my-cap-backend",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.admin",
+      "description": "Full access"
+    },
+    {
+      "name": "$XSAPPNAME.user",
+      "description": "Read-only access"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "admin",
+      "description": "Administrator",
+      "scope-references": ["$XSAPPNAME.admin"],
+      "attribute-references": []
+    },
+    {
+      "name": "user",
+      "description": "Standard User",
+      "scope-references": ["$XSAPPNAME.user"],
+      "attribute-references": []
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "TemplateBuilder_Admin",
+      "role-template-references": ["$XSAPPNAME.admin"]
+    },
+    {
+      "name": "TemplateBuilder_User",
+      "role-template-references": ["$XSAPPNAME.user"]
+    }
+  ]
+}
