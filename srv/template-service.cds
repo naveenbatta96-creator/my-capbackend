@@ -17,7 +17,12 @@ service TemplateService @(requires: [
             to   : 'admin'
         },
         {
-            grant: ['READ'],
+            grant: [
+                'READ',
+                'DELETE',
+                'CREATE',
+                'UPDATE'
+            ],
             to   : 'user'
         }
     ]
@@ -51,7 +56,12 @@ service TemplateService @(requires: [
             to   : 'admin'
         },
         {
-            grant: ['READ'],
+            grant: [
+                'READ',
+                'UPDATE',
+                'DELETE',
+                'CREATE'
+            ],
             to   : 'user'
         }
     ]

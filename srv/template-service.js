@@ -69,13 +69,16 @@ module.exports = cds.service.impl(async function () {
                 apiField: m.apiField,
                 mappingRule: m.mappingRule,
                 ruleId: m.ruleId,
-                ruleName: m.ruleName,   // FIX: was missing
-                sequenceNo: m.sequenceNo
+                ruleName: m.ruleName,
+                // FIX: was missing
+                sequenceNo: m.sequenceNo,
+                targetField: m.targetField,
             };
         });
 
         // 5. Build batch updates
         let mappedCount = 0;
+        let sequenceCounter = 1;
         const dbUpdates = [];
 
         for (const targetMapping of targetMappings) {
@@ -87,7 +90,9 @@ module.exports = cds.service.impl(async function () {
                         mappingRule: match.mappingRule,
                         ruleId: match.ruleId,
                         ruleName: match.ruleName,   // FIX: was missing
-                        sequenceNo: match.sequenceNo
+                        sequenceNo: sequenceCounter++,
+                        // sequenceNo: match.sequenceNo,
+                        targetField: match.targetField
                     }).where({ ID: targetMapping.ID })
                 );
                 mappedCount++;

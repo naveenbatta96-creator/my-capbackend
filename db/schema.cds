@@ -33,6 +33,7 @@ entity TemplateFieldMapping : cuid {
     field           : Association to FieldMaster;
     sourceFieldName : String(100);
     sequenceNo      : Integer;
+    targetField     : String(100);
     apiField        : String(100);
     mappingRule     : String(100);
     ruleId          : String(50);
