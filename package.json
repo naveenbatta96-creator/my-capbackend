@@ -27,7 +27,7 @@
         "[development]": {
           "kind": "sqlite",
           "credentials": {
-            "url": "sqlite.db"
+            "url": "db.sqlite"
           },
           "data": {
             "init": "upsert"

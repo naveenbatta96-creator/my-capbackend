@@ -20,6 +20,7 @@ entity TemplateMaster : cuid, managed {
 entity FieldMaster : cuid {
     levelName    : String(30);
     fieldName    : String(100);
+    description  : String(500);
     sapType      : String(40);
     fieldLength  : String(20);
     propertyType : String(20);

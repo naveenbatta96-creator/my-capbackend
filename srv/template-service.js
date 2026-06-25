@@ -23,13 +23,9 @@ module.exports = cds.service.impl(async function () {
             .groupBy('template_ID');
 
         const countMap = {};
-        counts.forEach(c => {
-            countMap[c.template_ID] = c.count;
-        });
+        counts.forEach(c => { countMap[c.template_ID] = c.count; });
 
-        rows.forEach(r => {
-            r.mappingsCount = countMap[r.ID] || 0;
-        });
+        rows.forEach(r => { r.mappingsCount = countMap[r.ID] || 0; });
     });
 
     // ================================================================
@@ -37,32 +33,19 @@ module.exports = cds.service.impl(async function () {
     // ================================================================
     this.on('autoMapStandard', async (req) => {
         const { targetTemplateId } = req.data;
-        if (!targetTemplateId) {
-            return req.error(400, 'Target template ID is required.');
-        }
+        if (!targetTemplateId) return req.error(400, 'Target template ID is required.');
 
-        // 1. Locate the standard master baseline template
         const standardTemplate = await SELECT.one.from(TemplateMaster).where({ isStandard: true });
-        if (!standardTemplate) {
-            return req.error(404, 'No standard template has been configured yet.');
-        }
-        if (standardTemplate.ID === targetTemplateId) {
-            return req.error(400, 'Target template is already the standard template.');
-        }
+        if (!standardTemplate) return req.error(404, 'No standard template has been configured yet.');
+        if (standardTemplate.ID === targetTemplateId) return req.error(400, 'Target template is already the standard template.');
 
-        // 2. Fetch standard template field mappings
         const standardMappings = await SELECT.from(TemplateFieldMapping).where({ template_ID: standardTemplate.ID });
-        if (!standardMappings || standardMappings.length === 0) {
-            return req.error(404, 'Standard template has no mappings configured.');
-        }
+        if (!standardMappings || standardMappings.length === 0) return req.error(404, 'Standard template has no mappings configured.');
 
-        // 3. Fetch target template mappings
         const targetMappings = await SELECT.from(TemplateFieldMapping).where({ template_ID: targetTemplateId });
-        if (!targetMappings || targetMappings.length === 0) {
-            return req.error(400, 'Target template has no fields added yet. Please add fields first.');
-        }
+        if (!targetMappings || targetMappings.length === 0) return req.error(400, 'Target template has no fields added yet. Please add fields first.');
 
-        // 4. Build lookup map from standard mappings by field_ID
+        // Build lookup by field_ID
         const standardLookup = {};
         standardMappings.forEach(m => {
             standardLookup[m.field_ID] = {
@@ -70,13 +53,11 @@ module.exports = cds.service.impl(async function () {
                 mappingRule: m.mappingRule,
                 ruleId: m.ruleId,
                 ruleName: m.ruleName,
-                // FIX: was missing
                 sequenceNo: m.sequenceNo,
                 targetField: m.targetField,
             };
         });
 
-        // 5. Build batch updates
         let mappedCount = 0;
         let sequenceCounter = 1;
         const dbUpdates = [];
@@ -89,9 +70,8 @@ module.exports = cds.service.impl(async function () {
                         apiField: match.apiField,
                         mappingRule: match.mappingRule,
                         ruleId: match.ruleId,
-                        ruleName: match.ruleName,   // FIX: was missing
+                        ruleName: match.ruleName,
                         sequenceNo: sequenceCounter++,
-                        // sequenceNo: match.sequenceNo,
                         targetField: match.targetField
                     }).where({ ID: targetMapping.ID })
                 );
@@ -99,12 +79,9 @@ module.exports = cds.service.impl(async function () {
             }
         }
 
-        // 6. Execute updates — run individually within CAP's transaction context
         if (dbUpdates.length > 0) {
             try {
-                for (const upd of dbUpdates) {
-                    await cds.run(upd); // FIX: cds.tx(req).run(array) is invalid
-                }
+                for (const upd of dbUpdates) await cds.run(upd);
             } catch (err) {
                 console.error('AutoMap Transaction Failed:', err);
                 return req.error(500, `Batch update failed: ${ err.message }`);
@@ -114,74 +91,87 @@ module.exports = cds.service.impl(async function () {
         console.log(`AutoMap Standard: ${ mappedCount } of ${ targetMappings.length } fields mapped.`);
         return true;
     });
-    //=================================================================
-    // AUTO MAP AI - AI maps  the fields
-    //=================================================================
-    this.on('autoMapAi', async (req) => {
+
+    // ================================================================
+    // AUTO MAP AI — Gemini suggests API fields for unmapped fields
+    // ================================================================
+    this.on('autoMapAI', async (req) => {
         const { templateId } = req.data;
 
+        // 1. Fetch unmapped rows
         const unmappedMappings = await SELECT
-            .from('lockbox.templatebuilder.TemplateFieldMapping')
+            .from(TemplateFieldMapping)
             .where({ template_ID: templateId, apiField: '' })
             .columns('ID', 'field_ID');
 
         if (unmappedMappings.length === 0) return true;
 
-        //
+        // 2. Fetch their FieldMaster rows — FIX: was 'filedName', correct is 'fieldName'
         const fieldIds = unmappedMappings.map(m => m.field_ID);
         const fields = await SELECT
-            .from('lockbox.templatebuilder.FieldMaster')
+            .from(FieldMaster)
             .where({ ID: { in: fieldIds } })
-            .columns('ID', 'filedName', 'levelName');
+            .columns('ID', 'fieldName', 'levelName', 'description');  // FIX: fieldName not filedName
 
-        const filedMap = {};
-        fields.forEach(f => { fieldMap[f.ID] = f; });
+        // 3. Build field lookup — FIX: was 'filedMap', correct is 'fieldMap'
+        const fieldMap = {};
+        fields.forEach(f => { fieldMap[f.ID] = f; });  // FIX: was 'filedMap'
 
+        // 4. Build prompt using description for richer context
         const fieldList = unmappedMappings.map((m, i) => {
             const f = fieldMap[m.field_ID] || {};
-
-            return `${ i + 1 }. fileldName : ${ f.fieldName || '' }, level : ${ f.levelName || '' }`;
+            return `${ i + 1 }. fieldName: ${ f.fieldName || '' }, description: ${ f.description || '' }, level: ${ f.levelName || '' }`;
         }).join('\n');
 
-        const prompt = `You are an SAP Locbox payment mapping assistant. 
-            Given these source fields, suggest the most appropriate SAP API field name for each.
-            Available SAP API fields: DepositDateTime, CompanyCode, LockboxBatchDestination, LockboxBatchOrigin, Currency, AmountInCurrency, LockboxBatch, Lockbox, cheque, AssignmentReference, PaymentReference, LockboxBatchItem, PaymentDifferenceReason, NetPaymentAmountInPaytCurrency, DeductionAmountInPaytCurrency.
-            Respond ONLY with a JSON array in this exact format, no explanation:  
-            [{"fieldName":"...","suggestedApiField":"..."}]
+        // FIX: Updated API field list to match Excel spec exactly (31 unique values)
+        const prompt = `You are an SAP ClearIQ Lockbox payment mapping assistant.
+Given these source fields, suggest the most appropriate SAP ClearIQ API field for each.
+Available API fields:
+HEADER level: LockboxBatch, Lockbox, CompanyCode, Destination of Transmission, Source of Transmission, DepositDateTime, IncomingPaymentFile, Number of Checks in Lockbox Batch, Currency, AmountInTransactionCurrency
+PAYMENT level: LockboxBatchItem, ValueDate, Cheque, PartnerBankCountry, PartnerBank, PartnerBankAccount, Customer, MemoLine1, Memo Line, PaymentAdvice, AssignmentReference, DocumentItemText, DocumentReferenceID, FiscalYear
+CLEARING level: PaymentAdviceItem, PaymentAdviceAccount, PaymentAdviceAccountType, PaymentReference, NetPaymentAmountInPaytCurrency, DeductionAmountInPaytCurrency, PaymentDifferenceReason
 
-            Fields to map:${ fieldList }`;
+Rules:
+- Match based on the field description and level
+- Only use API fields from the list above
+- If no good match exists, use an empty string ""
+- Respond ONLY with a JSON array, no explanation, no markdown:
+[{"fieldName":"...","suggestedApiField":"..."}]
 
+Fields to map:
+${ fieldList }`;
 
+        // 5. Call Gemini
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${ process.env.GEMINI_API_KEY }`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             }
         );
 
         const data = await response.json();
         let text = data.candidates[0].content.parts[0].text;
-        text = text.rerplace(/```json|```/g, '').trim();
+        text = text.replace(/```json|```/g, '').trim();  // FIX: was 'rerplace'
         const suggestions = JSON.parse(text);
 
+        // 6. Build suggestion lookup — FIX: was 'suggestionsMap', correct is 'suggestionMap'
         const suggestionMap = {};
-        suggestions.forEach(s => { suggestionsMap[s.fieldName] = s.suggestedApiField; });
+        suggestions.forEach(s => { suggestionMap[s.fieldName] = s.suggestedApiField; });  // FIX: was suggestionsMap
 
+        // 7. Apply suggestions — FIX: entity name was 'TemplateFieldMaping' (missing p)
         for (const mapping of unmappedMappings) {
             const field = fieldMap[mapping.field_ID];
             if (field && suggestionMap[field.fieldName]) {
-                await UPDATE('lockbox.templatebuilder.TemplateFieldMaping')
+                await UPDATE(TemplateFieldMapping)  // FIX: use entity ref, not string
                     .set({
                         apiField: suggestionMap[field.fieldName],
                         mappingRule: 'Derived'
                     }).where({ ID: mapping.ID });
-
             }
         }
+
         return true;
     });
 
@@ -193,7 +183,6 @@ module.exports = cds.service.impl(async function () {
 
         if (!req.user.is('admin')) return req.error(403, 'Only admins can set the standard template.');
 
-        // FIX: validate template exists before wiping isStandard on all rows
         const template = await SELECT.one.from(TemplateMaster).where({ ID: templateId });
         if (!template) return req.error(404, 'Template not found.');
 
@@ -243,7 +232,6 @@ module.exports = cds.service.impl(async function () {
     this.on('downloadTemplate', async (req) => {
         const { templateID, exportMode } = req.data;
 
-        // FIX: replaced broken CDS column selector syntax with manual joins
         const template = await SELECT.one.from(TemplateMaster).where({ ID: templateID });
         if (!template) return req.error(404, 'Template not found.');
 
@@ -257,9 +245,8 @@ module.exports = cds.service.impl(async function () {
         const fields = await SELECT.from(FieldMaster).where({ ID: { in: fieldIds } });
 
         const fieldMap = {};
-        fields.forEach(f => fieldMap[f.ID] = f);
-        // FIX: guard against missing field with fallback empty object
-        mappings.forEach(m => m.field = fieldMap[m.field_ID] || {});
+        fields.forEach(f => { fieldMap[f.ID] = f; });
+        mappings.forEach(m => { m.field = fieldMap[m.field_ID] || {}; });
         template.mappings = mappings;
 
         const oWorkbook = new ExcelJS.Workbook();
@@ -285,10 +272,7 @@ module.exports = cds.service.impl(async function () {
         };
 
         if (exportMode === 'SINGLE') {
-            // FIX: guard against undefined field
-            const headers = template.mappings
-                .map(m => m.field?.fieldName)
-                .filter(Boolean);
+            const headers = template.mappings.map(m => m.field?.fieldName).filter(Boolean);
             if (!headers.length) return req.error(404, 'No valid fields found for template.');
             createStyledSheet('Template', headers);
 
@@ -300,7 +284,7 @@ module.exports = cds.service.impl(async function () {
                 if (m.field?.fieldName) oGroupedData[level].push(m.field.fieldName);
             });
 
-            const levelOrder = ['HEADER', 'ITEM', 'PAYMENT', 'CLEARING'];
+            const levelOrder = ['HEADER', 'PAYMENT', 'CLEARING'];
             for (const levelName of levelOrder) {
                 if (oGroupedData[levelName]) {
                     const displayName = levelName.charAt(0) + levelName.slice(1).toLowerCase();

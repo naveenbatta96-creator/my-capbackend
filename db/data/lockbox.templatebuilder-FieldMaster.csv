@@ -1,33 +1,39 @@
-ID;levelName;fieldName;sapType;fieldLength;propertyType;isRequired;isCustom
-b87f3ccf-ffe4-4cac-b809-1e668ac276db;HEADER;Deposit Date;DATS;8;Date;true;false
-bc1c153c-af72-4a5e-9e1c-f22b6582a5f7;HEADER;Company Code;CHAR;4;Standard;true;false
-fc722230-50fb-4e96-9a3e-ac1043b1d36f;HEADER;Batch Destination;CHAR;15;Standard;false;false
-e6d1e100-3af8-458a-a7ab-b23100f256bf;HEADER;Batch Origin;CHAR;15;Standard;false;false
-ec42eaf5-a192-48c3-8d81-b7a84e147c96;HEADER;Currency;CUKY;5;Standard;false;false
-268f5861-9b08-4f21-9420-a47f7509de0c;HEADER;Total Batch Amount;CURR;15;Amount;false;false
-5dcf34dd-a909-4cb9-9fbf-1cde0537c1d8;HEADER;Lockbox Batch;CHAR;10;Standard;false;false
-683388e3-df46-401a-8034-a1c0d503f005;HEADER;Lockbox ID;CHAR;10;Standard;true;false
-256e0a4c-4b26-4ea3-8f76-09b9f085ee86;PAYMENT;Customer Number;CHAR;10;Standard;false;false
-af47eb36-c2b5-4401-a390-0246032f7d65;PAYMENT;Payment Amount;CURR;15;Amount;true;false
-8506519f-a516-4ea0-b869-e0e4acd13a40;PAYMENT;Payment Currency;CUKY;5;Standard;false;false
-b712307d-cbd2-4dbb-9b6e-0e644d77040d;PAYMENT;Cheque Number;CHAR;15;Standard;false;false
-6cfc93de-3478-4ed2-8f5e-29303736faa5;PAYMENT;Assignment Reference;CHAR;18;Standard;false;false
-2a55da85-414e-475b-ad5a-faa30cc39792;PAYMENT;Payment Reference;CHAR;16;Standard;false;false
-00cd8f32-86f2-4344-afc7-e030d536f4f2;PAYMENT;Lockbox Batch Item;CHAR;10;Standard;false;false
-52d63700-1656-4b7b-9c94-b4818cec7d1a;PAYMENT;Payment Difference Reason;CHAR;3;Standard;false;false
-6c5e4892-f343-41bd-a3a4-9840188b7d40;PAYMENT;Memo Line 1;CHAR;50;Standard;false;false
-724d8706-e61e-413d-80ba-5c6cfb5390a9;PAYMENT;Lockbox Batch Reference;CHAR;10;Standard;false;false
-ed34d547-c787-4f11-8bd8-968f7b8e7040;PAYMENT;Lockbox Number;CHAR;10;Standard;false;false
-c7730775-b2c1-461d-b707-afea23ee5075;PAYMENT;Customer Account;CHAR;10;Standard;false;false
-c33cb55a-1754-4817-a46c-4fa3136df93d;CLEARING;Lockbox Batch Item Number;NUMC;6;Number;false;false
-eef63af8-745a-4eff-a101-642e59203567;CLEARING;Payment Difference Code;CHAR;3;Standard;false;false
-751424df-fba6-4436-92f4-b838d85fa18d;CLEARING;Invoice Reference;CHAR;16;Standard;false;false
-47307aee-8a76-43c0-b337-23696e56dfd3;CLEARING;Payment Advice Number;CHAR;10;Standard;false;false
-c095c36d-84b6-4ba1-8482-eb1e3124c24c;CLEARING;Customer;CHAR;10;Standard;false;false
-1d09230c-d384-4eca-a23a-301c3e16d3d7;CLEARING;Account Type;CHAR;1;Standard;false;false
-459965f2-e760-4e7c-9dd0-1ba9f4bd60db;CLEARING;Invoice Currency;CUKY;5;Standard;false;false
-757005ed-9805-42b5-a5e2-b6adf5bbcaba;CLEARING;Net Payment Amount;CURR;15;Amount;false;false
-a86c28cc-108e-4892-a480-b490a5a7a8b0;CLEARING;Deduction Amount;CURR;15;Amount;false;false
-f3e5fa61-899a-40bd-bc03-302df30ee2ca;CLEARING;Difference Reason;CHAR;3;Standard;false;false
-971311ac-d8fd-4456-84ed-53f005918696;CLEARING;Lockbox Batch Item Ref;CHAR;10;Standard;false;false
-9379bd65-f9ba-415a-b999-373102084117;CLEARING;Lockbox Batch Number;CHAR;10;Standard;false;false
+ID;levelName;fieldName;description;sapType;fieldLength;propertyType;isRequired;isCustom
+668b569a-5959-b224-fb8f-83cf8267d5b2;Batch;Batch Number;"Lockbox batch identifier; may repeat at header and line level";CHAR;10;Standard;False;False
+f859b8b0-7e02-6b37-7fab-55e16183bd72;Batch;Lockbox Number;Bank/lockbox identifier used for incoming lockbox file processing;CHAR;10;Standard;True;False
+a27d87c9-8ede-4ab2-aeb3-c28515c4af4d;Batch;Company Code;SAP legal entity/company code;CHAR;4;Standard;False;False
+909bc00d-e895-2b22-d844-61fca9eefa80;Batch;LockboxBatchDestination;Destination bank/account or lockbox processing location;CHAR;20;Standard;True;False
+cb4d7090-23eb-5293-9677-7c620868b9fe;Batch;LockboxBatchOrigin;Originating bank/location/source of lockbox batch;CHAR;20;Standard;True;False
+82c654f7-5836-ddbe-3eac-0f73ec5bdfdb;Batch;Deposit Date and Time;Deposit receipt date and time from bank file;TIMESTAMP;14;Date;True;False
+dc9dc416-106f-5b57-906a-ecdeaa67a877;Batch;Incoming Payment File ID;Unique identifier for the inbound payment file;CHAR;20;Standard;False;False
+7470f689-36c1-0a49-a1a2-443d0d79550e;Batch;NumberOfItems;Total number of items/checks in the batch;NUMC;6;Number;False;False
+e32c0aad-079b-9415-4e29-593ef6ab9640;Batch;Currency;Transaction currency code;CUKY;5;Standard;False;False
+2e1c6d2b-7f96-de2f-5db5-06406e9531b0;Batch;Payment Amount;Total payment amount at batch/header level;CURR;15;Amount;True;False
+db0ca8c5-5cfc-5ffb-4819-f44e99b7db98;BatchItem;Line item-Bank Statement;Bank statement line item number;NUMC;6;Number;True;False
+d8a1e725-1b36-fc35-6cc0-8dab538c03f3;BatchItem;Batch Number;"Lockbox batch identifier; may repeat at header and line level";CHAR;10;Standard;True;False
+dd6b8ed8-96f3-31d2-c520-9ee45a9d6a99;BatchItem;Value Date of the Item;Value date for cash application/posting;DATS;8;Date;False;False
+f1c3f9bd-71c8-2517-2f89-f1c68814e795;BatchItem;Payment/Cheque Amount;Amount of individual payment/check;CURR;15;Amount;True;False
+e54f6786-27dc-70f4-e179-1e67942be565;BatchItem;Check Number;Cheque/check reference number;CHAR;15;Standard;True;False
+0877374d-0ef3-6481-9fe3-80bf1a9a8521;BatchItem;Partner Bank Account;Payer/customer bank account number;CHAR;18;Standard;False;False
+29eb776e-9f25-1027-570a-3a77afe0df08;BatchItem;Partner Bank Code;Payer/customer bank key/routing number;CHAR;15;Standard;False;False
+ad99e945-d049-c7cb-397c-8e2ad3b6199d;BatchItem;Partner Bank Account;Payer/customer bank account number;CHAR;18;Standard;False;False
+8da60945-7251-9546-da7d-b63c24b13a32;BatchItem;Customer;SAP customer account number;CHAR;10;Standard;False;False
+442f16d8-92ef-f68f-36cd-6ef48abd1312;BatchItem;First Line of the Memo Line;First memo/reference text line from bank file;CHAR;50;Standard;False;False
+63139d44-e926-e1ab-c72a-1568a51bcc72;BatchItem;MemoLine;Full memo/remittance information text;CHAR;140;Standard;False;False
+940ac55a-8980-129c-1606-0fba81332d67;BatchItem;Payment Advice Number;Payment advice document/reference number;CHAR;10;Standard;False;False
+d8a93c1f-5c6f-4bd6-a5f5-43856e78d9ea;BatchItem;Assignment Number;Assignment/reference used for clearing;CHAR;18;Standard;False;False
+bd597ad8-0892-d983-adc1-9fe995234102;BatchItem;Description;Free-text description;CHAR;50;Standard;False;False
+97e626de-e92d-1792-9d20-c8fc8d120e5e;BatchItem;Reference Document Number;External/reference document number;CHAR;16;Standard;False;False
+42df852b-38bd-2ed0-b38f-3d7ed846a328;BatchItem;Company Code;SAP legal entity/company code;CHAR;4;Standard;False;False
+633c962a-b67b-4e91-5e20-626f28f56067;BatchItem;Fiscal Year;SAP fiscal year;NUMC;4;Number;False;False
+188c842d-ef14-6a64-2d81-e3121cfeb466;CLEARING;Payment Advice Number;Payment advice document/reference number;CHAR;10;Standard;False;False
+5c8b183b-bf66-9251-2144-f4586169ed4a;CLEARING;Payment Advice Item;Line item within payment advice;NUMC;6;Number;False;False
+65c103cc-3df4-07d8-1f51-99cfe2c9034a;CLEARING;Account Number;Customer/vendor/G/L account number;CHAR;10;Standard;False;False
+3b358467-ce91-eebd-befe-73351b4ff133;CLEARING;Account Type;SAP account type indicator, e.g., D/K/S;CHAR;1;Standard;False;False
+19ca638d-602d-aac0-57d7-2c658504e855;CLEARING;Company Code;SAP legal entity/company code;CHAR;4;Standard;False;False
+f910cadc-b9a3-6e8f-b370-7e65389fd662;CLEARING;Invoice;Customer invoice reference;CHAR;16;Standard;False;False
+6f6f14a4-14ee-47de-5d3f-a5e0380176df;CLEARING;Document number;SAP accounting document number;CHAR;10;Standard;False;False
+479cca12-303d-5b5d-d1a2-25a95b87b8b8;CLEARING;Invoice Amount;Original invoice amount;CURR;15;Amount;False;False
+d6353d2d-35f4-c897-ce21-02d84f343a42;CLEARING;Deduction Amount;Short payment/deduction amount;CURR;15;Amount;False;False
+f10bbb09-789d-0d70-5dee-b1969fbeaf30;CLEARING;Reason Code;Deduction/reason code;CHAR;4;Standard;False;False
+0f06ccf7-4a9c-58e0-7f51-f13ca759efbe;CLEARING;Invoice Currency;Invoice ISO currency code;CUKY;5;Standard;False;False
